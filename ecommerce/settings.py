@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # local apps
     "ecommerce.dashboard",
+    "ecommerce.inventory",
+    # external applications
+    "mptt",
 ]
 
 MIDDLEWARE = [
