@@ -29,6 +29,11 @@ class Category(MPTTModel):
     )
     is_active = models.BooleanField(
         default=True,
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("category visiblity"),
+        help_text=_("format: true=category visisble"),
     )
     parent = TreeForeignKey(
         "self",
@@ -47,6 +52,68 @@ class Category(MPTTModel):
     class Meta:
         verbose_name = _("product category")
         verbose_name_plural = _("product categories")
+
+    def __str__(self):
+        return self.name
+
+
+# Create your models here.
+class Product(models.Model):
+    """
+    create category
+    """
+
+    web_id = models.CharField(
+        max_length=50,
+        null=False,
+        unique=True,
+        blank=False,
+        verbose_name=_("product website id"),
+        help_text=_("format: required,unique"),
+    )
+    name = models.CharField(
+        max_length=255,
+        null=False,
+        unique=False,
+        blank=False,
+        verbose_name=_("product name"),
+        help_text=_("format: required,max-255"),
+    )
+    slug = models.SlugField(
+        max_length=150,
+        null=False,
+        unique=False,
+        blank=False,
+        verbose_name=_("product safe URL"),
+        help_text=_("format: required,letters,numbers,underscore, or hyphens"),
+    )
+    description = models.TextField(
+        null=False,
+        unique=False,
+        blank=False,
+        verbose_name=_("product description"),
+        help_text=_("format: required"),
+    )
+    category = TreeManyToManyField(Category)
+    is_active = models.BooleanField(
+        default=True,
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("product visiblity"),
+        help_text=_("format: true=product visisble"),
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        editable=False,
+        verbose_name=_("date product created"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_("date product updated"),
+        help_text=_("format: Y-m-d H:M:S"),
+    )
 
     def __str__(self):
         return self.name
