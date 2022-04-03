@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     "ecommerce.inventory",
     "ecommerce.demo",
     # external applications
+    "django_elasticsearch_dsl",
     "mptt",
+    # Development
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -81,13 +85,22 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     } 5432
+# }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -129,3 +142,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+from urllib.parse import quote_plus as urlquote
+
+elk_base_url = "elasticsearch://{user_name}:{password}@{host_ip}:{host_port}"
+elastic_search_url = elk_base_url.format(
+    user_name="elastic",
+    password=urlquote("pa5is8an"),
+    # password may contain special characters
+    host_ip="localhost",
+    host_port=9200,
+)
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": [elastic_search_url]},
+}
