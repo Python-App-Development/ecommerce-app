@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     # local apps
     "ecommerce.dashboard",
     "ecommerce.inventory",
+    "ecommerce.drf",
     "ecommerce.demo",
     # external applications
-    "django_elasticsearch_dsl",
+    # "django_elasticsearch_dsl",
     "mptt",
+    "rest_framework",
     # Development
-    "debug_toolbar",
+    # "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -144,16 +146,22 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-from urllib.parse import quote_plus as urlquote
+# from urllib.parse import quote_plus as urlquote
 
-elk_base_url = "elasticsearch://{user_name}:{password}@{host_ip}:{host_port}"
-elastic_search_url = elk_base_url.format(
-    user_name="elastic",
-    password=urlquote("pa5is8an"),
-    # password may contain special characters
-    host_ip="localhost",
-    host_port=9200,
-)
-ELASTICSEARCH_DSL = {
-    "default": {"hosts": [elastic_search_url]},
+# elk_base_url = "elasticsearch://{user_name}:{password}@{host_ip}:{host_port}"
+# elastic_search_url = elk_base_url.format(
+#     user_name="elastic",
+#     password=urlquote("pa5is8an"),
+#     # password may contain special characters
+#     host_ip="localhost",
+#     host_port=9200,
+# )
+# ELASTICSEARCH_DSL = {
+#     "default": {"hosts": [elastic_search_url]},
+# }
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
 }
